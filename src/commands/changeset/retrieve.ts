@@ -23,7 +23,8 @@ export default class Retrieve extends SfdxCommand {
 
   protected static flagsConfig = {
     // flag with a value (-n, --name=VALUE)
-    changesetname: flags.string({char: 'c', required: true, description: messages.getMessage('changesetnameFlagDescription')})
+    changesetname: flags.string({char: 'c', required: true, description: messages.getMessage('changesetnameFlagDescription')}),
+    mode: flags.string({char: 'm', description: messages.getMessage('modeFlagDescription')})
   };
 
   // Comment this out if your command does not require an org username
@@ -35,6 +36,7 @@ export default class Retrieve extends SfdxCommand {
   public async run(): Promise<AnyJson> {
     const username = this.org.getUsername();
     const changesetname = this.flags.changesetname;
+    const mode = this.flags.mode;
 
     const conn = this.org.getConnection();
     conn.metadata.pollTimeout = (10*60*1000); // 10 minutes
@@ -43,14 +45,26 @@ export default class Retrieve extends SfdxCommand {
     const pkgBuf = await this.retrieveChangeset(conn, changesetname);
     this.ux.stopSpinner('Done!');
 
-    this.ux.startSpinner('Extracting package.xml');
-    let zip = new AdmZip(pkgBuf);
-    await zip.extractEntryTo(`${changesetname}/package.xml`, `changesets`, true, true);
-    this.ux.stopSpinner('Done!');
+    if (mode == 'convert') {
+      this.ux.startSpinner('Extracting Package');
+      let zip = new AdmZip(pkgBuf);
+      await zip.extractAllTo(`changesets/${changesetname}`, true);
+      this.ux.stopSpinner('Done!');
 
-    this.ux.startSpinner('Retrieving source');
-    await runCommand(`sfdx force:source:retrieve -u ${username} -x changesets/${changesetname}/package.xml`);
-    this.ux.stopSpinner('Done!');
+      this.ux.startSpinner('Converting to Source');
+      await runCommand(`sfdx force:mdapi:convert -r changesets/${changesetname}`);
+      this.ux.stopSpinner('Done!');
+    }
+    else {
+      this.ux.startSpinner('Extracting package.xml');
+      let zip = new AdmZip(pkgBuf);
+      await zip.extractEntryTo(`${changesetname}/package.xml`, `changesets`, true, true);
+      this.ux.stopSpinner('Done!');
+
+      this.ux.startSpinner('Retrieving Source');
+      await runCommand(`sfdx force:source:retrieve -u ${username} -x changesets/${changesetname}/package.xml`);
+      this.ux.stopSpinner('Done!');
+    }
 
     // Return an object to be displayed with --json
     return;

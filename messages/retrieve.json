@@ -1,5 +1,6 @@
 {
   "commandDescription": "print a greeting and your org IDs",
   "changesetnameFlagDescription": "name of changeset to retrieve",
+  "modeFlagDescription": "source or convert",
   "errorNoOrgResults": "No results found for the org '%s'."
 }
