@@ -45,17 +45,7 @@ export default class Retrieve extends SfdxCommand {
     const pkgBuf = await this.retrieveChangeset(conn, changesetname);
     this.ux.stopSpinner('Done!');
 
-    if (mode == 'convert') {
-      this.ux.startSpinner('Extracting Package');
-      let zip = new AdmZip(pkgBuf);
-      await zip.extractAllTo(`changesets/${changesetname}`, true);
-      this.ux.stopSpinner('Done!');
-
-      this.ux.startSpinner('Converting to Source');
-      await runCommand(`sfdx force:mdapi:convert -r changesets/${changesetname}`);
-      this.ux.stopSpinner('Done!');
-    }
-    else {
+    if (mode == 'source') {
       this.ux.startSpinner('Extracting package.xml');
       let zip = new AdmZip(pkgBuf);
       await zip.extractEntryTo(`${changesetname}/package.xml`, `changesets`, true, true);
@@ -63,6 +53,16 @@ export default class Retrieve extends SfdxCommand {
 
       this.ux.startSpinner('Retrieving Source');
       await runCommand(`sfdx force:source:retrieve -u ${username} -x changesets/${changesetname}/package.xml`);
+      this.ux.stopSpinner('Done!');
+    }
+    else {
+      this.ux.startSpinner('Extracting Package');
+      let zip = new AdmZip(pkgBuf);
+      await zip.extractAllTo(`changesets`, true);
+      this.ux.stopSpinner('Done!');
+
+      this.ux.startSpinner('Converting to Source');
+      await runCommand(`sfdx force:mdapi:convert -r changesets/${changesetname}`);
       this.ux.stopSpinner('Done!');
     }
 
