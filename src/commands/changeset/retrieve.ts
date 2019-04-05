@@ -74,7 +74,9 @@ export default class Retrieve extends SfdxCommand {
     
     return new Promise(function(resolve, reject) {
       var dataBuffer = [];
-      conn.metadata.retrieve({ packageNames: [ changesetname ] })
+
+      // Must specify api version here, was defaulting to 13.0 otherwise
+      conn.metadata.retrieve({ packageNames: [ changesetname ], apiVersion: conn.getApiVersion() })
         .stream()
         .on('data', function(chunk) {
           dataBuffer.push(chunk);
