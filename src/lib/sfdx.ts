@@ -11,7 +11,19 @@ export const runCommand = (fullCommand: string): Promise<Dictionary> => {
 
   //const parts = fullCommand.split(' ');
 
-  const parts = fullCommand.match(/(?:[^\s"]+|"[^"]*")+/g);
+  // Split string, handle quote marks
+  // https://stackoverflow.com/questions/2817646/javascript-split-string-on-space-or-on-quotes-to-array
+  const parts = fullCommand.match(/\\?.|^$/g).reduce((p, c) => {
+    if(c === '"'){
+        p.quote ^= 1;
+    }else if(!p.quote && c === ' '){
+        p.a.push('');
+    }else{
+        p.a[p.a.length-1] += c.replace(/\\(.)/,"$1");
+    }
+    return  p;
+  }, {a: ['']}).a
+
   const commandName = parts[0];
   const args = parts.slice(1);
 

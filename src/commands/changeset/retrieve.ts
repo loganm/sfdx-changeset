@@ -53,7 +53,7 @@ export default class Retrieve extends SfdxCommand {
       this.ux.stopSpinner('Done!');
 
       this.ux.startSpinner('Retrieving Source');
-      await runCommand(`sfdx force:source:retrieve -u ${username} -x changesets/${changesetname}/package.xml`);
+      await runCommand(`sfdx force:source:retrieve -u "${username}" -x "changesets/${changesetname}/package.xml"`);
       this.ux.stopSpinner('Done!');
     }
 
@@ -64,7 +64,7 @@ export default class Retrieve extends SfdxCommand {
       this.ux.stopSpinner('Done!');
 
       this.ux.startSpinner('Converting to Source');
-      await runCommand(`sfdx force:mdapi:convert -r changesets/${changesetname}`);
+      await runCommand(`sfdx force:mdapi:convert -r "changesets/${changesetname}"`);
       this.ux.stopSpinner('Done!');
     }
 
