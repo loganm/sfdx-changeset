@@ -1,5 +1,5 @@
 import { flags, SfdxCommand } from '@salesforce/command';
-import { Messages, SfdxError } from '@salesforce/core';
+import { Messages } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
 import * as AdmZip from 'adm-zip';
 import * as del from 'del';
@@ -10,14 +10,19 @@ Messages.importMessagesDirectory(__dirname);
 
 // Load the specific messages for this file. Messages from @salesforce/command, @salesforce/core,
 // or any library that is using the messages framework can also be loaded this way.
-const messages = Messages.loadMessages('changeset', 'retrieve');
+const messages = Messages.loadMessages('sfdx-changeset', 'retrieve');
 
 export default class Retrieve extends SfdxCommand {
 
   public static description = messages.getMessage('commandDescription');
 
   public static examples = [
-  `$ sfdx changeset:retrieve --targetusername myOrg@example.com --changeset "Name of Changeset"`
+  `$ sfdx changeset:retrieve --targetusername myOrg@example.com --changeset "Name of Changeset"
+  Retrieving Changeset... Done!
+  Extracting Package... Done!
+  Converting to Source... Done!
+  Cleaning up temporary files... Done!
+  `
   ];
 
   public static args = [{name: 'file'}];

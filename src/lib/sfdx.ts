@@ -22,7 +22,7 @@ export const runCommand = (fullCommand: string): Promise<Dictionary> => {
         p.a[p.a.length-1] += c.replace(/\\(.)/,"$1");
     }
     return  p;
-  }, {a: ['']}).a
+  }, {quote: null, a: ['']}).a
 
   const commandName = parts[0];
   const args = parts.slice(1);
