@@ -18,7 +18,7 @@ An SFDX plugin that can retrieve components from a changeset into an org-based p
 <!-- install -->
 <!-- usage -->
 ```sh-session
-$ npm install -g sfdx
+$ npm install -g sfdx-changeset
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
