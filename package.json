@@ -1,7 +1,7 @@
 {
   "name": "sfdx-changeset",
   "description": "Retrieve components from a changeset to an SFDX project",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "author": "Logan Moore @loganm",
   "bugs": "https://github.com/loganm/sfdx-changeset/issues",
   "dependencies": {

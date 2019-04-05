@@ -22,7 +22,7 @@ $ npm install -g sfdx-changeset
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-sfdx-changeset/0.0.1 darwin-x64 node-v11.9.0
+sfdx-changeset/0.1.0 darwin-x64 node-v11.9.0
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -56,5 +56,5 @@ EXAMPLE
      Cleaning up temporary files... Done!
 ```
 
-_See code: [src/commands/changeset/retrieve.ts](https://github.com/loganm/sfdx-changeset/blob/v0.0.1/src/commands/changeset/retrieve.ts)_
+_See code: [src/commands/changeset/retrieve.ts](https://github.com/loganm/sfdx-changeset/blob/v0.1.0/src/commands/changeset/retrieve.ts)_
 <!-- commandsstop -->
