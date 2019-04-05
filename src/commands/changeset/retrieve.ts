@@ -29,8 +29,7 @@ export default class Retrieve extends SfdxCommand {
 
   protected static flagsConfig = {
     // flag with a value (-n, --name=VALUE)
-    changesetname: flags.string({char: 'c', required: true, description: messages.getMessage('changesetnameFlagDescription')}),
-    mode: flags.enum({char: 'm', options: ['source', 'mdapi'], default: 'mdapi', description: messages.getMessage('modeFlagDescription')})
+    changesetname: flags.string({char: 'c', required: true, description: messages.getMessage('changesetnameFlagDescription')})
   };
 
   // Comment this out if your command does not require an org username
@@ -42,7 +41,6 @@ export default class Retrieve extends SfdxCommand {
   public async run(): Promise<AnyJson> {
     const username = this.org.getUsername();
     const changesetname = this.flags.changesetname;
-    const mode = this.flags.mode;
 
     const conn = this.org.getConnection();
     conn.metadata.pollTimeout = (10*60*1000); // 10 minutes
@@ -51,27 +49,14 @@ export default class Retrieve extends SfdxCommand {
     const pkgBuf = await this.retrieveChangeset(conn, changesetname);
     this.ux.stopSpinner('Done!');
 
-    if (mode == 'source') {
-      this.ux.startSpinner('Extracting package.xml');
-      let zip = new AdmZip(pkgBuf);
-      await zip.extractEntryTo(`${changesetname}/package.xml`, `changesets`, true, true);
-      this.ux.stopSpinner('Done!');
+    this.ux.startSpinner('Extracting package.xml');
+    let zip = new AdmZip(pkgBuf);
+    await zip.extractEntryTo(`${changesetname}/package.xml`, `changesets`, true, true);
+    this.ux.stopSpinner('Done!');
 
-      this.ux.startSpinner('Retrieving Source');
-      await runCommand(`sfdx force:source:retrieve -u "${username}" -x "changesets/${changesetname}/package.xml"`);
-      this.ux.stopSpinner('Done!');
-    }
-
-    if (mode == 'mdapi') {
-      this.ux.startSpinner('Extracting Package');
-      let zip = new AdmZip(pkgBuf);
-      await zip.extractAllTo(`changesets`, true);
-      this.ux.stopSpinner('Done!');
-
-      this.ux.startSpinner('Converting to Source');
-      await runCommand(`sfdx force:mdapi:convert -r "changesets/${changesetname}"`);
-      this.ux.stopSpinner('Done!');
-    }
+    this.ux.startSpinner('Retrieving Source');
+    await runCommand(`sfdx force:source:retrieve -u "${username}" -x "changesets/${changesetname}/package.xml"`);
+    this.ux.stopSpinner('Done!');
 
     this.ux.startSpinner('Cleaning up temporary files');
     del.sync(['changesets']);

@@ -1,5 +1,4 @@
 {
   "commandDescription": "Download a changeset to the project",
-  "changesetnameFlagDescription": "name of changeset to retrieve",
-  "modeFlagDescription": "source re-retrieves the package with source:retrieve, mdapi converts the package with mdapi:convert"
+  "changesetnameFlagDescription": "name of changeset to retrieve"
 }
