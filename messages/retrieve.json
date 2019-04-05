@@ -1,6 +1,5 @@
 {
-  "commandDescription": "print a greeting and your org IDs",
+  "commandDescription": "Download a changeset to the project",
   "changesetnameFlagDescription": "name of changeset to retrieve",
-  "modeFlagDescription": "source or convert",
-  "errorNoOrgResults": "No results found for the org '%s'."
+  "modeFlagDescription": "source re-retrieves the package with source:retrieve, mdapi converts the package with mdapi:convert"
 }

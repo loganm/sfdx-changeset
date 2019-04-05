@@ -2,6 +2,7 @@ import { flags, SfdxCommand } from '@salesforce/command';
 import { Messages, SfdxError } from '@salesforce/core';
 import { AnyJson } from '@salesforce/ts-types';
 import * as AdmZip from 'adm-zip';
+import * as del from 'del';
 import { runCommand } from '../../lib/sfdx';
 
 // Initialize Messages with the current plugin directory
@@ -24,7 +25,7 @@ export default class Retrieve extends SfdxCommand {
   protected static flagsConfig = {
     // flag with a value (-n, --name=VALUE)
     changesetname: flags.string({char: 'c', required: true, description: messages.getMessage('changesetnameFlagDescription')}),
-    mode: flags.string({char: 'm', description: messages.getMessage('modeFlagDescription')})
+    mode: flags.enum({char: 'm', options: ['source', 'mdapi'], default: 'mdapi', description: messages.getMessage('modeFlagDescription')})
   };
 
   // Comment this out if your command does not require an org username
@@ -55,7 +56,8 @@ export default class Retrieve extends SfdxCommand {
       await runCommand(`sfdx force:source:retrieve -u ${username} -x changesets/${changesetname}/package.xml`);
       this.ux.stopSpinner('Done!');
     }
-    else {
+
+    if (mode == 'mdapi') {
       this.ux.startSpinner('Extracting Package');
       let zip = new AdmZip(pkgBuf);
       await zip.extractAllTo(`changesets`, true);
@@ -66,7 +68,10 @@ export default class Retrieve extends SfdxCommand {
       this.ux.stopSpinner('Done!');
     }
 
-    // Return an object to be displayed with --json
+    this.ux.startSpinner('Cleaning up temporary files');
+    del.sync(['changesets']);
+    this.ux.stopSpinner('Done!');
+
     return;
   }
 
