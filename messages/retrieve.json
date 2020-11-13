@@ -1,4 +1,8 @@
 {
   "commandDescription": "Download a changeset to the project",
-  "changesetnameFlagDescription": "name of changeset to retrieve"
+  "changesetnameFlagDescription": "name of changeset to retrieve",
+  "packagenameFlagDescription": "the package.xml will be saved to this path",
+  "savepackageFlagDescription": "save the package.xml in manifest/changesets/<change set name>/package.xml",
+
+  "packageFlagsError": "please use either of the flags -n <path> or -p, but not both"
 }
