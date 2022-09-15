@@ -22,7 +22,7 @@ $ npm install -g sfdx-changeset
 $ sfdx COMMAND
 running command...
 $ sfdx (-v|--version|version)
-sfdx-changeset/0.1.0 darwin-x64 node-v11.9.0
+sfdx-changeset/0.1.0 darwin-x64 node-v12.19.0
 $ sfdx --help [COMMAND]
 USAGE
   $ sfdx COMMAND
@@ -30,29 +30,51 @@ USAGE
 ```
 <!-- usagestop -->
 <!-- commands -->
-* [`sfdx changeset:retrieve -c <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-changesetretrieve--c-string--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
+* [`sfdx changeset:retrieve -c <string> [-n <string>] [-p] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`](#sfdx-changesetretrieve--c-string--n-string--p--u-string---apiversion-string---json---loglevel-tracedebuginfowarnerrorfatal)
 
-## `sfdx changeset:retrieve -c <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
+## `sfdx changeset:retrieve -c <string> [-n <string>] [-p] [-u <string>] [--apiversion <string>] [--json] [--loglevel trace|debug|info|warn|error|fatal]`
 
 Download a changeset to the project
 
 ```
 USAGE
-  $ sfdx changeset:retrieve -c <string> [-u <string>] [--apiversion <string>] [--json] [--loglevel 
+  $ sfdx changeset:retrieve -c <string> [-n <string>] [-p] [-u <string>] [--apiversion <string>] [--json] [--loglevel 
   trace|debug|info|warn|error|fatal]
 
 OPTIONS
   -c, --changesetname=changesetname               (required) name of changeset to retrieve
+  -n, --packagename=packagename                   the package.xml will be saved to this path
+
+  -p, --savepackage                               save the package.xml in manifest/changesets/<change set
+                                                  name>/package.xml
+
   -u, --targetusername=targetusername             username or alias for the target org; overrides default target org
+
   --apiversion=apiversion                         override the api version used for api requests made by this command
+
   --json                                          format output as json
+
   --loglevel=(trace|debug|info|warn|error|fatal)  [default: warn] logging level for this command invocation
 
-EXAMPLE
+EXAMPLES
   $ sfdx changeset:retrieve --targetusername myOrg@example.com --changeset "Name of Changeset"
      Retrieving Changeset... Done!
      Extracting Package... Done!
      Converting to Source... Done!
+     Cleaning up temporary files... Done!
+  
+  $ sfdx changeset:retrieve --targetusername myOrg@example.com --changeset "Name of Changeset" -p
+     Retrieving Changeset... Done!
+     Extracting Package... Done!
+     Converting to Source... Done!
+     Saving manifest/changesets/Name-of-Changeset-package.xml... Done!
+     Cleaning up temporary files... Done!
+  
+  $ sfdx changeset:retrieve --targetusername myOrg@example.com --changeset "Name of Changeset" -n manifest/pack.xml
+     Retrieving Changeset... Done!
+     Extracting Package... Done!
+     Converting to Source... Done!
+     Saving manifest/pack.xml... Done!
      Cleaning up temporary files... Done!
 ```
 
